@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Claude Code Usage</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="widget" class="full">
+    <div id="panel">
+      <header id="bar">
+        <div class="brand">
+          <span id="mark" class="mark" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24"><g stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+              <line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="5.6" y1="5.6" x2="18.4" y2="18.4"/><line x1="18.4" y1="5.6" x2="5.6" y2="18.4"/>
+            </g></svg>
+          </span>
+          <span class="word">Claude Code</span>
+          <button id="statusBtn" class="status-btn hidden" title="Live data status" aria-label="Live data status">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+          </button>
+          <button id="updateBtn" class="update-btn hidden" title="Update status" aria-label="Update status">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+          </button>
+        </div>
+        <div class="tools">
+          <button id="refreshBtn" class="tool" title="Refresh live data" aria-label="Refresh live data">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+          </button>
+          <button id="pinBtn" class="tool" title="Pin on top">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.9V4h6v6.9l2 3.1H7l2-3.1z"/></svg>
+          </button>
+          <button id="modeBtn" class="tool" title="Switch view (Standard → Pro → Compact)">
+            <svg width="15" height="15" viewBox="0 0 24 24"><g fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="1.6"/><rect x="13" y="3" width="8" height="8" rx="1.6"/><rect x="3" y="13" width="8" height="8" rx="1.6"/><rect x="13" y="13" width="8" height="8" rx="1.6"/></g></svg>
+          </button>
+          <button id="hideBtn" class="tool" title="Hide (Ctrl+Shift+Space)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- STANDARD (full) layout -->
+      <section class="usage" id="sessionBlock">
+        <div class="u-label">SESSION <span>· 5h</span></div>
+        <div class="u-pct" id="sessionPct">—</div>
+        <div class="u-track"><div class="u-fill" id="sessionFill"></div></div>
+        <div class="u-reset" id="sessionReset">—</div>
+      </section>
+
+      <section class="usage" id="weeklyBlock">
+        <div class="u-label">WEEKLY <span>· 7d</span></div>
+        <div class="u-pct" id="weeklyPct">—</div>
+        <div class="u-track"><div class="u-fill" id="weeklyFill"></div></div>
+        <div class="u-reset" id="weeklyReset">—</div>
+      </section>
+
+      <footer id="foot">
+        <span class="status"><span id="statusDot" class="dot"></span><span id="statusText">—</span></span>
+        <span id="todayTok" class="today">—</span>
+      </footer>
+
+      <!-- COMPACT layout -->
+      <div id="compact">
+        <div class="c-row">
+          <span class="c-key">S</span>
+          <span class="c-pct" id="cSessionPct">—</span>
+          <div class="c-track"><div class="c-fill" id="cSessionFill"></div></div>
+          <span class="c-reset" id="cSessionReset">—</span>
+        </div>
+        <div class="c-row">
+          <span class="c-key">W</span>
+          <span class="c-pct" id="cWeeklyPct">—</span>
+          <div class="c-track"><div class="c-fill" id="cWeeklyFill"></div></div>
+          <span class="c-reset" id="cWeeklyReset">—</span>
+        </div>
+      </div>
+
+      <!-- PRO (instrument cluster) layout -->
+      <div id="pro">
+        <!-- top row: two big performance gauges -->
+        <div class="ic-top">
+          <div class="ic-xl">
+            <button class="ic-info" data-info="session" title="How is this calculated?" aria-label="How is this calculated?">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5"/><path d="M12 8h.01"/></svg>
+            </button>
+            <div class="ic-dial">
+              <canvas id="gSession"></canvas>
+              <div class="ic-center">
+                <div class="ic-pct" id="pSessionPct">—</div>
+                <div class="ic-lbl">SESSION 5H</div>
+              </div>
+              <span class="ic-ico" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14"/><path d="M3 20h12"/><path d="M14 9h2.5a1.5 1.5 0 0 1 1.5 1.5V16a1.5 1.5 0 0 0 1.5 1.5A1.5 1.5 0 0 0 22 16V8.4a2 2 0 0 0-.6-1.4L19 5"/><path d="M7 8h4"/></svg>
+              </span>
+            </div>
+            <div class="ic-reset" id="pSessionReset"><span class="ic-clock"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="ic-reset-t">—</span></div>
+          </div>
+          <div class="ic-xl">
+            <button class="ic-info" data-info="weekly" title="How is this calculated?" aria-label="How is this calculated?">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5"/><path d="M12 8h.01"/></svg>
+            </button>
+            <div class="ic-dial">
+              <canvas id="gWeekly"></canvas>
+              <div class="ic-center">
+                <div class="ic-pct" id="pWeeklyPct">—</div>
+                <div class="ic-lbl">WEEKLY 7D</div>
+              </div>
+              <span class="ic-ico" aria-hidden="true">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+              </span>
+            </div>
+            <div class="ic-reset" id="pWeeklyReset"><span class="ic-clock"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="ic-reset-t">—</span></div>
+          </div>
+        </div>
+
+        <!-- middle row: burn rate / fuel tank / ai power -->
+        <div class="ic-mid">
+          <div class="ic-cell">
+            <button class="ic-info" data-info="burn" title="How is this calculated?" aria-label="How is this calculated?">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5"/><path d="M12 8h.01"/></svg>
+            </button>
+            <div class="ic-title">BURN RATE</div>
+            <div class="ic-dial-sm">
+              <canvas id="gBurn"></canvas>
+              <div class="ic-readout"><span class="ic-rv" id="pBurnVal">—</span><span class="ic-rk">TOKENS / MIN</span></div>
+            </div>
+            <canvas class="ic-spark" id="sparkBurn"></canvas>
+          </div>
+
+          <div class="ic-cell ic-fuel">
+            <button class="ic-info" data-info="fuel" title="How is this calculated?" aria-label="How is this calculated?">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5"/><path d="M12 8h.01"/></svg>
+            </button>
+            <div class="ic-title">FUEL TANK</div>
+            <span class="ic-fuel-ico" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14"/><path d="M3 20h12"/><path d="M14 9h2.5a1.5 1.5 0 0 1 1.5 1.5V16a1.5 1.5 0 0 0 1.5 1.5A1.5 1.5 0 0 0 22 16V8.4a2 2 0 0 0-.6-1.4L19 5"/><path d="M7 8h4"/></svg>
+            </span>
+            <div class="fuel-tank">
+              <span class="fuel-cap e">E</span>
+              <div class="fuel-segs" id="fuelSegs"></div>
+              <span class="fuel-cap f">F</span>
+            </div>
+            <div class="ic-readout static"><span class="ic-rv" id="pFuelVal">—</span><span class="ic-rk">REMAINING</span></div>
+            <div class="fuel-chip" id="fuelChip">
+              <span class="fuel-bolt" aria-hidden="true">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5z"/></svg>
+              </span>
+              <span class="fuel-chip-txt"><b id="pFuelMain">—</b><i id="pFuelSub">—</i></span>
+            </div>
+          </div>
+
+          <div class="ic-cell">
+            <button class="ic-info" data-info="power" title="How is this calculated?" aria-label="How is this calculated?">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 16.5v-5"/><path d="M12 8h.01"/></svg>
+            </button>
+            <div class="ic-title">AI POWER</div>
+            <div class="ic-dial-sm">
+              <canvas id="gPower"></canvas>
+              <div class="ic-readout"><span class="ic-rv" id="pPowerVal">—</span><span class="ic-rk">ACTIVE</span></div>
+            </div>
+            <canvas class="ic-spark" id="wavePower"></canvas>
+          </div>
+        </div>
+
+        <!-- telemetry footer -->
+        <footer class="ic-foot">
+          <span class="ic-tele"><span id="pDot" class="dot"></span><span id="pStatus">—</span></span>
+          <span class="ic-tele mid">
+            <span class="ic-tele-ico" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2-6 4 12 2-6h4"/></svg></span>
+            <span id="pActivity">—</span>
+          </span>
+          <span class="ic-tele">
+            <span class="ic-tele-ico" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3-4 3 3 4-6"/></svg></span>
+            <span id="pToday">—</span>
+          </span>
+        </footer>
+      </div>
+
+      <div id="infoPop" class="info-pop hidden" role="dialog">
+        <div class="info-title"></div>
+        <div class="info-text"></div>
+        <button id="infoAction" class="info-action hidden">Refresh now</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="util.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

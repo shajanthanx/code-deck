@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+
+# Build output / release artifacts
+dist/
+out/
+*.exe
+*.blockmap
+*.nsis.7z
+latest*.yml
+
+# Secrets & credentials — NEVER commit these
+.env
+.env.*
+*.pem
+*.pfx
+*.p12
+*.key
+*.cer
+*.crt
+*.der
+secrets.json
+config.json
+credentials.json
+.credentials.json
+
+# App runtime data (lives in %APPDATA%, but ignore defensively)
+widget-config.json
+cc-speedometer-live.json
+
+# Local electron-updater test feed
+dev-app-update.yml
+
+# Logs
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
