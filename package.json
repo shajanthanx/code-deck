@@ -1,6 +1,6 @@
 {
   "name": "claude-code-speedometer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A small Claude-branded desktop widget showing your Claude Code session (5h) and weekly (7d) usage.",
   "main": "main.js",
   "author": "shajanthan",
